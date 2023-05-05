@@ -1,8 +1,0 @@
-export { default as Logo } from './logo.svg'
-export { default as MetamaskIcon } from './metamask.svg'
-export { default as Wallet } from './wallet.svg'
-export { default as EmptyQuest } from './empty-quest.svg'
-export { default as ComingSoonIcon } from './coming-soon.svg'
-export { default as SadIcon } from './sad.svg'
-export { default as FaceAnguishedIcon } from './face-anguished.svg'
-export { default as WinnerIcon } from './winner.svg'
