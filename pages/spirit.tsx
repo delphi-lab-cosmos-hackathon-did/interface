@@ -8,8 +8,58 @@ import { BaseButton } from '../src/component/BaseButton'
 import BaseToggle from '../src/component/BaseToggle'
 import Badge from '../src/component/Badge'
 
+const mockTag = [
+  'Osmo Whale',
+  'Osmo Early Supporter',
+  'Osmo Whale',
+  'Osmo Whale',
+  'Osmo Whale',
+  'Osmo Whale',
+  'Osmo Whale',
+  'Osmo Whale',
+]
+
+const mockBadge = [
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+  {
+    image: '/pepe.png',
+    header: 'OSMO Whale',
+    description: 'Hold more than 1,000,000 OSMO',
+  },
+]
 export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
+  const [activeFilter, setActiveFilter] = useState([true, false, false])
+
+  const toggleFilter = (indice) => {
+    const cacheActiveFilter = [false, false, false]
+    cacheActiveFilter[indice] = true
+    setActiveFilter([...cacheActiveFilter])
+  }
   return (
     <Container maxWidth="xl">
       <Box minWidth="100%" marginBottom="80px">
@@ -112,30 +162,13 @@ export default function Spirit() {
                 </Box>
               </Box>
               <Box display="flex" width="800px" flexWrap="wrap">
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Early Supporter</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
-                <Box marginRight="22px" marginTop="32px">
-                  <BaseButton>Osmo Whale</BaseButton>
-                </Box>
+                {mockTag.map((tag, index) => {
+                  return (
+                    <Box key={index} marginRight="22px" marginTop="32px">
+                      <BaseButton>{tag}</BaseButton>
+                    </Box>
+                  )
+                })}
               </Box>
             </Box>
           ) : (
@@ -184,59 +217,44 @@ export default function Spirit() {
             My Badge:
           </Typography>
           <Box display="flex" marginTop="32px">
-            <BaseToggle active image="/logo.png">
+            <BaseToggle
+              onClick={() => toggleFilter(0)}
+              active={activeFilter[0]}
+              image="/logo.png"
+            >
               All
             </BaseToggle>
             <Box sx={{ marginLeft: '18px' }}>
-              <BaseToggle image="/osmosis.png">Osmosis</BaseToggle>
+              <BaseToggle
+                onClick={() => toggleFilter(1)}
+                active={activeFilter[1]}
+                image="/osmosis.png"
+              >
+                Osmosis
+              </BaseToggle>
             </Box>
             <Box sx={{ marginLeft: '18px' }}>
-              <BaseToggle image="/mars.png">Mars Protocol</BaseToggle>
+              <BaseToggle
+                onClick={() => toggleFilter(2)}
+                active={activeFilter[2]}
+                image="/mars.png"
+              >
+                Mars Protocol
+              </BaseToggle>
             </Box>
           </Box>
           <Box marginTop="24px" display="flex" flexWrap="wrap">
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
-            <Box marginTop="16px" marginRight="100px">
-              <Badge
-                image="/pepe.png"
-                header="OSMO Whale"
-                description="Hold more than 1,000,000 OSMO"
-              />
-            </Box>
+            {mockBadge.map((badge, index) => {
+              return (
+                <Box key={index} marginTop="16px" marginRight="100px">
+                  <Badge
+                    image={badge.image}
+                    header={badge.header}
+                    description={badge.description}
+                  />
+                </Box>
+              )
+            })}
           </Box>
         </Box>
       </Box>

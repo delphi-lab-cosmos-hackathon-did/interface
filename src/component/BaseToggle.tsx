@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import React, { FC } from 'react'
 
-const BaseToggle: FC<any> = ({ children, image, active }) => {
+const BaseToggle: FC<any> = ({ children, image, active, onClick }) => {
   return (
     <Box
       display="flex"
@@ -11,7 +11,9 @@ const BaseToggle: FC<any> = ({ children, image, active }) => {
         borderRadius: '15px',
         background: 'rgba(217, 217, 217, 0.3)',
         border: active ? '2px solid #FFC83A' : '',
+        cursor: 'pointer',
       }}
+      onClick={onClick}
     >
       <Box sx={{ marginRight: '8px' }}>
         <img width="30" height="30" src={image} />
