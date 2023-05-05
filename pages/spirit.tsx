@@ -3,10 +3,14 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import SearchIcon from '@mui/icons-material/Search'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BaseButton } from '../src/component/BaseButton'
 import BaseToggle from '../src/component/BaseToggle'
 import Badge from '../src/component/Badge'
+import { API_DATA } from '../src/constant/mockData'
+import { Item, Spirit } from '../src/type/spirit.interface'
+import { MARS, OSMOSIS } from '../src/constant/protocol'
+import dayjs from 'dayjs'
 
 const mockTag = [
   'Osmo Whale',
@@ -54,11 +58,55 @@ const mockBadge = [
 export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
+  const [filterStamp, setFilterStamp] = useState<Item[]>([])
+  const [apiData, setAPIData] = useState<Spirit>(API_DATA)
+  const [badge, setBadge] = useState<Set<string>>(new Set())
 
   const toggleFilter = (indice) => {
     const cacheActiveFilter = [false, false, false]
     cacheActiveFilter[indice] = true
     setActiveFilter([...cacheActiveFilter])
+  }
+
+  useEffect(() => {
+    let cacheBadge = new Set<string>()
+    apiData.attributes.forEach((attr) => {
+      attr.items.forEach((item) => {
+        cacheBadge.add(item.attribute)
+      })
+    })
+    setBadge(cacheBadge)
+  })
+  useEffect(() => {
+    //filter osmo
+    let cacheFilterStamp: Item[] = []
+    apiData.attributes.forEach((attr) => {
+      const cacheItems = attr.items
+        .map((item) => {
+          return item
+        })
+        .filter((item) => {
+          if (activeFilter[1]) {
+            return item.type === OSMOSIS
+          } else if (activeFilter[2]) {
+            return item.type === MARS
+          } else {
+            return true
+          }
+        })
+      cacheFilterStamp = cacheFilterStamp.concat(cacheItems)
+    })
+    setFilterStamp([...cacheFilterStamp])
+  }, [activeFilter])
+
+  const formatDateDuration = (startDate, endDate) => {
+    const duration = dayjs(startDate).diff(dayjs(endDate), 'month')
+    if (duration < 12) {
+      return `${duration} Months`
+    }
+    const year = Math.floor(duration / 12)
+    const month = duration % 12
+    return `${year} Year ${month} Months`
   }
   return (
     <Container maxWidth="xl">
@@ -125,7 +173,12 @@ export default function Spirit() {
                   >
                     {' '}
                     Wallet Age:{' '}
-                    <span style={{ color: 'white' }}>2 Year 1 Months</span>
+                    <span style={{ color: 'white' }}>
+                      {formatDateDuration(
+                        apiData.statistics.last_active_timestamp,
+                        apiData.statistics.first_active_timestamp,
+                      )}
+                    </span>
                   </Typography>
                   <Typography
                     sx={{ marginTop: '8px' }}
@@ -162,7 +215,7 @@ export default function Spirit() {
                 </Box>
               </Box>
               <Box display="flex" width="800px" flexWrap="wrap">
-                {mockTag.map((tag, index) => {
+                {Array.from(badge).map((tag, index) => {
                   return (
                     <Box key={index} marginRight="22px" marginTop="32px">
                       <BaseButton>{tag}</BaseButton>
@@ -244,13 +297,13 @@ export default function Spirit() {
             </Box>
           </Box>
           <Box marginTop="24px" display="flex" flexWrap="wrap">
-            {mockBadge.map((badge, index) => {
+            {filterStamp.map((stamp, index) => {
               return (
                 <Box key={index} marginTop="16px" marginRight="100px">
                   <Badge
-                    image={badge.image}
-                    header={badge.header}
-                    description={badge.description}
+                    image={'./pepe.png'}
+                    header={stamp.attribute}
+                    description={stamp.description}
                   />
                 </Box>
               )
