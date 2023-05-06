@@ -9,11 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { useChain, useWallet } from '@cosmos-kit/react'
 import { formatAddress } from '../src/utils/formatAddress'
 import { Menu, MenuItem } from '@mui/material'
+import { useRouter } from 'next/router'
 
 export const ButtonAppBar = () => {
   const { username, connect, disconnect, address } = useChain('osmosis')
   const { wallet } = useWallet()
-  console.log(address)
+  const router = useRouter()
+
   return (
     <Box>
       <AppBar
@@ -21,34 +23,46 @@ export const ButtonAppBar = () => {
         sx={{ background: 'transparent', boxShadow: 'none' }}
       >
         <Toolbar sx={{ py: 1 }}>
-          <Box sx={{ mr: 1 }}>
-            <img width={70} src="/logo.png" alt="logo" />
-          </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            onClick={() => {
+              router.push('/')
+            }}
+            sx={{ cursor: 'pointer' }}
+          >
+            <Box sx={{ mr: 1 }}>
+              <img width={70} src="/logo.png" alt="logo" />
+            </Box>
 
-          <Box>
-            <Typography
-              variant="h5"
-              fontWeight={700}
-              color="white"
-              lineHeight={1}
-              fontSize={24}
-            >
-              SPIRITO
-            </Typography>
-            <Typography
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                color="white"
+                lineHeight={1}
+                fontSize={24}
+              >
+                SPIRITO
+              </Typography>
+              {/* <Typography
               variant="body1"
               fontWeight={600}
               color="white"
               fontSize={14}
             >
               First Native Cosmos Identity
-            </Typography>
+            </Typography> */}
+            </Box>
           </Box>
-          <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{ flexGrow: 1, ml: 2 }}>
             <Button
-              sx={{ my: 2, color: 'white', display: 'block', height: '100%' }}
+              sx={{ color: 'white', display: 'block', height: '100%' }}
+              onClick={() => {
+                router.push('/spirit')
+              }}
             >
-              tes
+              Spirit
             </Button>
           </Box>
 
