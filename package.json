@@ -21,6 +21,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "chain-registry": "^1.13.0",
+    "dayjs": "^1.11.7",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
