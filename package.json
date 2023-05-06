@@ -10,12 +10,17 @@
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.30.1",
+    "@cosmos-kit/core": "^1.4.1",
+    "@cosmos-kit/keplr": "^0.33.26",
+    "@cosmos-kit/react": "^1.3.21",
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/server": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "chain-registry": "^1.13.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"

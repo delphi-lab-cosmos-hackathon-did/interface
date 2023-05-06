@@ -1,44 +1,54 @@
-import { OutlinedInput, TextField } from '@mui/material';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import SearchIcon from '@mui/icons-material/Search';
+import { Button, OutlinedInput, TextField } from '@mui/material'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import SearchIcon from '@mui/icons-material/Search'
 const items = [
   {
-    image:
-      'https://pbs.twimg.com/profile_images/1579179879484063744/NL2jKAzX_400x400.jpg'
-  }
-];
+    title: 'NFT Identity',
+    description:
+      'A composable SBT to collect badge for your on-chain activities.',
+  },
+  {
+    title: 'Protocol Badge',
+    description:
+      'Reward your user with badge to be used for future airdrops and incentives',
+  },
+  {
+    title: 'Tag Search',
+    description: 'Identify your targeted segment with on-chain behavior tag',
+  },
+]
 export default function Home() {
   return (
-    <Container maxWidth='xl'>
-      <Box
-        sx={{
-          my: 4,
-          display: 'flex',
-
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
-        <Box>
+    <Box sx={{ background: 'url(/bg.svg)' }}>
+      <Container maxWidth="xl">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          height="calc(100vh - 86px)"
+        >
           <Typography
-            variant='h3'
+            variant="h3"
             fontWeight={600}
-            component='h1'
+            component="h1"
             gutterBottom
-            color='white'
+            color="white"
           >
             Explore your own{' '}
             <span style={{ color: '#00D1FF' }}> Cosmos Identity</span>
           </Typography>
           <Typography
-            variant='h5'
+            variant="h5"
             fontWeight={600}
-            component='h1'
+            component="h1"
             gutterBottom
-            color='white'
-            mb={4}
+            color="white"
+            mb={2}
           >
             Redeem your
             <span style={{ color: '#EAFF68' }}>
@@ -46,31 +56,68 @@ export default function Home() {
               Reputation, Achievement, Loyalty
             </span>
           </Typography>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            color="white"
+            component="h1"
+            gutterBottom
+            mb={4}
+            fontSize={14}
+          >
+            Supported over 260 protocols in Cosmos Ecosystem
+          </Typography>
           <OutlinedInput
             startAdornment={<SearchIcon sx={{ marginRight: 1 }} />}
-            placeholder='Address'
-            sx={{ width: 500, background: 'white', borderRadius: '8px' }}
+            placeholder="Address"
+            sx={{ width: 500, background: 'white', borderRadius: '8px', mb: 3 }}
           />
+
+          <Typography fontSize={30} fontWeight={600} color="white">
+            OR
+          </Typography>
+          <Box my={3} width="200px">
+            <Button fullWidth variant="contained">
+              Mint You Spirit
+            </Button>
+          </Box>
+
+          {/* <img width={300} src="/logo.png" alt="logo" /> */}
+          <Box display="flex" textAlign="center" gap={5}>
+            {items.map((item) => {
+              return (
+                <Box
+                  sx={{
+                    background: 'rgba(217, 217, 217, 0.4)',
+                    border: '2px solid #000000',
+                    borderRadius: 2,
+                    width: 200,
+                    py: 2,
+                    px: 2,
+                  }}
+                >
+                  <Typography
+                    sx={{ textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
+                    fontWeight={700}
+                    fontSize={20}
+                    color="#40F1C5"
+                  >
+                    {item.title}
+                  </Typography>
+                  <Typography
+                    sx={{ textShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)' }}
+                    fontWeight={700}
+                    fontSize={14}
+                    color="white"
+                  >
+                    {item.description}
+                  </Typography>
+                </Box>
+              )
+            })}
+          </Box>
         </Box>
-        <img width={300} src='/logo.png' alt='logo' />
-      </Box>
-      <Box borderRadius={2}>
-        {items.map((item) => {
-          return (
-            <Box textAlign='center'>
-              <img
-                width={100}
-                src={item.image}
-                alt='logo'
-                style={{ borderRadius: '50%', border: '5px solid black' }}
-              />
-              <Box sx={{}}>
-                <Typography>OSMOSIS LP Provider</Typography>
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
-    </Container>
-  );
+      </Container>
+    </Box>
+  )
 }
