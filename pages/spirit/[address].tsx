@@ -24,7 +24,7 @@ export default function Spirit() {
 
   const router = useRouter()
 
-  const toggleFilter = (indice) => {
+  const toggleFilter = (indice: number) => {
     const cacheActiveFilter = [false, false, false]
     cacheActiveFilter[indice] = true
     setActiveFilter([...cacheActiveFilter])
@@ -34,7 +34,7 @@ export default function Spirit() {
     if (router.isReady) {
       const fetch = async () => {
         const spirit = await spiritService.getSpirit({
-          address: router.query.address.toString() || '',
+          address: (router.query?.address || '').toString(),
         })
         setAPIData(spirit)
       }
@@ -74,7 +74,7 @@ export default function Spirit() {
     setFilterStamp([...cacheFilterStamp])
   }, [activeFilter])
 
-  const formatDateDuration = (startDate, endDate) => {
+  const formatDateDuration = (startDate: string, endDate: string) => {
     const duration = dayjs(startDate).diff(dayjs(endDate), 'month')
     if (duration < 12) {
       return `${duration} Months`
