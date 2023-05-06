@@ -55,16 +55,18 @@ export const ButtonAppBar = () => {
             </Typography> */}
             </Box>
           </Box>
-          <Box sx={{ flexGrow: 1, ml: 2 }}>
+          <Box sx={{ ml: 2 }}>
             <Button
               sx={{ color: 'white', display: 'block', height: '100%' }}
-              onClick={() => {
-                router.push('/spirit')
-              }}
+              // onClick={() => {
+              //   router.push('/spirit')
+              // }}
+              href="/spirit"
             >
               Spirit
             </Button>
           </Box>
+          <Box flex="1"></Box>
 
           {
             <Button variant="contained" onClick={() => connect()}>

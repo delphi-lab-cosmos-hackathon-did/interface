@@ -34,8 +34,9 @@ export default function Home() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            py: 4,
           }}
-          height="calc(100vh - 86px)"
+          minHeight="calc(100vh - 86px)"
         >
           <Typography
             variant="h3"
