@@ -11,50 +11,10 @@ import { API_DATA } from '../../src/constant/mockData'
 import { Item, Spirit } from '../../src/type/spirit.interface'
 import { MARS, OSMOSIS } from '../../src/constant/protocol'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import { useAddressInfo } from '../../src/hooks/useBackend'
+import { spiritService } from '../../src/service/spiritService'
 
-const mockTag = [
-  'Osmo Whale',
-  'Osmo Early Supporter',
-  'Osmo Whale',
-  'Osmo Whale',
-  'Osmo Whale',
-  'Osmo Whale',
-  'Osmo Whale',
-  'Osmo Whale',
-]
-
-const mockBadge = [
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-  {
-    image: '/pepe.png',
-    header: 'OSMO Whale',
-    description: 'Hold more than 1,000,000 OSMO',
-  },
-]
 export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
@@ -62,11 +22,25 @@ export default function Spirit() {
   const [apiData, setAPIData] = useState<Spirit>(API_DATA)
   const [badge, setBadge] = useState<Set<string>>(new Set())
 
-  const toggleFilter = (indice) => {
+  const router = useRouter()
+
+  const toggleFilter = (indice: number) => {
     const cacheActiveFilter = [false, false, false]
     cacheActiveFilter[indice] = true
     setActiveFilter([...cacheActiveFilter])
   }
+
+  useEffect(() => {
+    if (router.isReady) {
+      const fetch = async () => {
+        const spirit = await spiritService.getSpirit({
+          address: (router.query?.address || '').toString(),
+        })
+        setAPIData(spirit)
+      }
+      fetch()
+    }
+  }, [router.isReady])
 
   useEffect(() => {
     let cacheBadge = new Set<string>()
@@ -76,7 +50,8 @@ export default function Spirit() {
       })
     })
     setBadge(cacheBadge)
-  })
+  }, [apiData])
+
   useEffect(() => {
     //filter osmo
     let cacheFilterStamp: Item[] = []
@@ -99,7 +74,7 @@ export default function Spirit() {
     setFilterStamp([...cacheFilterStamp])
   }, [activeFilter])
 
-  const formatDateDuration = (startDate, endDate) => {
+  const formatDateDuration = (startDate: string, endDate: string) => {
     const duration = dayjs(startDate).diff(dayjs(endDate), 'month')
     if (duration < 12) {
       return `${duration} Months`
@@ -150,7 +125,7 @@ export default function Spirit() {
                 lineHeight="40px"
                 color="white"
               >
-                osmo1typsgj0nvketwusvaakyerjp9exr2fuxw5hhxs
+                {router.query.address}
               </Typography>
               <Box
                 sx={{
