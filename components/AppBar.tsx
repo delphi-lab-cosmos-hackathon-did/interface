@@ -47,9 +47,7 @@ export const ButtonAppBar = () => {
           <Box sx={{ flexGrow: 1 }}>
             <Button
               sx={{ my: 2, color: 'white', display: 'block', height: '100%' }}
-            >
-              tes
-            </Button>
+            ></Button>
           </Box>
 
           {
