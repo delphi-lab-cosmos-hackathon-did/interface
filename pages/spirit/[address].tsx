@@ -43,7 +43,7 @@ export default function Spirit() {
       ],
       gas: '200261',
     }
-    client.execute(
+    const result = await client.execute(
       address || '',
       'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
       {
@@ -53,6 +53,7 @@ export default function Spirit() {
       },
       fee,
     )
+
     setMinted(true)
   }
   const checkSpiritStatus = async () => {
@@ -330,7 +331,7 @@ export default function Spirit() {
                 return (
                   <Box key={index} marginTop="16px" marginRight="100px">
                     <Badge
-                      image={'./pepe.png'}
+                      image={stamp.image}
                       header={stamp.attribute}
                       description={stamp.description}
                     />

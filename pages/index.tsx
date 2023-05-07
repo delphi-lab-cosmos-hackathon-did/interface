@@ -3,6 +3,8 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import SearchIcon from '@mui/icons-material/Search'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 const items = [
   {
     title: 'NFT Identity',
@@ -20,6 +22,9 @@ const items = [
   },
 ]
 export default function Home() {
+  const router = useRouter()
+  const [address, setAddress] = useState('')
+
   return (
     <Box sx={{ background: 'url(/bg.svg)' }}>
       <Container maxWidth="xl">
@@ -29,8 +34,9 @@ export default function Home() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            py: 4,
           }}
-          height="calc(100vh - 86px)"
+          minHeight="calc(100vh - 86px)"
         >
           <Typography
             variant="h3"
@@ -62,22 +68,45 @@ export default function Home() {
             color="white"
             component="h1"
             gutterBottom
-            mb={4}
+            mb={2}
             fontSize={14}
           >
             Supported over 260 protocols in Cosmos Ecosystem
           </Typography>
+          <Box display="flex" mb={4} gap={2} alignItems={'center'}>
+            {['/atom.png', '/osmosis.png', '/mars.png'].map((logo) => (
+              <img src={logo} width={24} height={24} />
+            ))}
+            <Typography color="white" fontWeight={600} fontSize={12}>
+              & many more
+            </Typography>
+          </Box>
           <OutlinedInput
             startAdornment={<SearchIcon sx={{ marginRight: 1 }} />}
             placeholder="Address"
             sx={{ width: 500, background: 'white', borderRadius: '8px', mb: 3 }}
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value)
+            }}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                router.push(`/spirit/${address}`)
+              }
+            }}
           />
 
           <Typography fontSize={30} fontWeight={600} color="white">
             OR
           </Typography>
           <Box my={3} width="200px">
-            <Button fullWidth variant="contained">
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => {
+                router.push('/spirit')
+              }}
+            >
               Mint You Spirit
             </Button>
           </Box>

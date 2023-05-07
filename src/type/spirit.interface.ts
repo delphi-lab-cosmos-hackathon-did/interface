@@ -10,6 +10,7 @@ export interface Attribute {
 
 export interface Item {
   attribute: string
+  image?: string
   description: string
   type: string
 }
