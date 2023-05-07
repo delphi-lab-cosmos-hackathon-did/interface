@@ -12,8 +12,9 @@ import { Item, Spirit } from '../../src/type/spirit.interface'
 import { MARS, OSMOSIS } from '../../src/constant/protocol'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { useAddressInfo } from '../../src/hooks/useBackend'
 import { spiritService } from '../../src/service/spiritService'
+import { useChainWallet } from '@cosmos-kit/react'
+import { StdFee } from '@cosmjs/stargate'
 
 export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
@@ -24,19 +25,67 @@ export default function Spirit() {
 
   const router = useRouter()
 
+  const { getCosmWasmClient, getSigningCosmWasmClient, address } =
+    useChainWallet('osmosistestnet', 'keplr-extension', false)
   const toggleFilter = (indice: number) => {
     const cacheActiveFilter = [false, false, false]
     cacheActiveFilter[indice] = true
     setActiveFilter([...cacheActiveFilter])
   }
+  const mintSpirit = async () => {
+    const client = await getSigningCosmWasmClient()
+    const fee: StdFee = {
+      amount: [
+        {
+          denom: 'uosmo',
+          amount: '100',
+        },
+      ],
+      gas: '200261',
+    }
+    client.execute(
+      address || '',
+      'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
+      {
+        mint: {
+          owner: router.query.address,
+        },
+      },
+      fee,
+    )
+    setMinted(true)
+  }
+  const checkSpiritStatus = async () => {
+    const client = await getCosmWasmClient()
 
+    try {
+      const msg = await client.queryContractSmart(
+        'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
+        {
+          tokens: {
+            owner: router.query.address,
+          },
+        },
+      )
+      if (msg.tokens.length === 0) {
+        setMinted(false)
+      }
+    } catch (err) {
+      setMinted(false)
+    }
+  }
   useEffect(() => {
     if (router.isReady) {
       const fetch = async () => {
-        const spirit = await spiritService.getSpirit({
-          address: (router.query?.address || '').toString(),
-        })
-        setAPIData(spirit)
+        try {
+          await checkSpiritStatus()
+          const spirit = await spiritService.getSpirit({
+            address: (router.query?.address || '').toString(),
+          })
+          setAPIData(spirit)
+        } catch (err) {
+          console.log('err', err)
+        }
       }
       fetch()
     }
@@ -229,62 +278,68 @@ export default function Spirit() {
               >
                 You don’t have Spirit yet. Mint your Spirit to explore badges
               </Typography>
-              <BaseButton sx={{ marginTop: '32px' }} fullWidth>
+              <BaseButton
+                onClick={() => mintSpirit()}
+                sx={{ marginTop: '32px' }}
+                fullWidth
+              >
                 Mint Spirit
               </BaseButton>
             </Box>
           )}
         </Box>
-        <Box marginTop="46px">
-          <Typography
-            fontSize="60px"
-            fontWeight="700"
-            lineHeight="90px"
-            color="white"
-          >
-            My Badge:
-          </Typography>
-          <Box display="flex" marginTop="32px">
-            <BaseToggle
-              onClick={() => toggleFilter(0)}
-              active={activeFilter[0]}
-              image="/logo.png"
+        {minted && (
+          <Box marginTop="46px">
+            <Typography
+              fontSize="60px"
+              fontWeight="700"
+              lineHeight="90px"
+              color="white"
             >
-              All
-            </BaseToggle>
-            <Box sx={{ marginLeft: '18px' }}>
+              My Badge:
+            </Typography>
+            <Box display="flex" marginTop="32px">
               <BaseToggle
-                onClick={() => toggleFilter(1)}
-                active={activeFilter[1]}
-                image="/osmosis.png"
+                onClick={() => toggleFilter(0)}
+                active={activeFilter[0]}
+                image="/logo.png"
               >
-                Osmosis
+                All
               </BaseToggle>
+              <Box sx={{ marginLeft: '18px' }}>
+                <BaseToggle
+                  onClick={() => toggleFilter(1)}
+                  active={activeFilter[1]}
+                  image="/osmosis.png"
+                >
+                  Osmosis
+                </BaseToggle>
+              </Box>
+              <Box sx={{ marginLeft: '18px' }}>
+                <BaseToggle
+                  onClick={() => toggleFilter(2)}
+                  active={activeFilter[2]}
+                  image="/mars.png"
+                >
+                  Mars Protocol
+                </BaseToggle>
+              </Box>
             </Box>
-            <Box sx={{ marginLeft: '18px' }}>
-              <BaseToggle
-                onClick={() => toggleFilter(2)}
-                active={activeFilter[2]}
-                image="/mars.png"
-              >
-                Mars Protocol
-              </BaseToggle>
+            <Box marginTop="24px" display="flex" flexWrap="wrap">
+              {filterStamp.map((stamp, index) => {
+                return (
+                  <Box key={index} marginTop="16px" marginRight="100px">
+                    <Badge
+                      image={'./pepe.png'}
+                      header={stamp.attribute}
+                      description={stamp.description}
+                    />
+                  </Box>
+                )
+              })}
             </Box>
           </Box>
-          <Box marginTop="24px" display="flex" flexWrap="wrap">
-            {filterStamp.map((stamp, index) => {
-              return (
-                <Box key={index} marginTop="16px" marginRight="100px">
-                  <Badge
-                    image={'./pepe.png'}
-                    header={stamp.attribute}
-                    description={stamp.description}
-                  />
-                </Box>
-              )
-            })}
-          </Box>
-        </Box>
+        )}
       </Box>
     </Container>
   )

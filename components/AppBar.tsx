@@ -11,9 +11,8 @@ import { formatAddress } from '../src/utils/formatAddress'
 import { Menu, MenuItem } from '@mui/material'
 
 export const ButtonAppBar = () => {
-  const { username, connect, disconnect, address } = useChain('osmosis')
+  const { username, connect, disconnect, address } = useChain('osmosistestnet')
   const { wallet } = useWallet()
-  console.log(address)
   return (
     <Box>
       <AppBar
