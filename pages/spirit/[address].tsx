@@ -206,7 +206,17 @@ export default function Spirit() {
           </Box>
           {ready ? (
             minted ? (
-              <Box sx={{ textAlign: 'start' }}>
+              <Box
+                sx={{
+                  width: '574px',
+                  height: '272px',
+                  background: 'rgba(217, 217, 217, 0.3)',
+                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  borderRadius: '15px',
+                  padding: '38px 60px',
+                  textAlign: 'start',
+                }}
+              >
                 <Typography
                   sx={{ marginTop: '8px' }}
                   fontSize="20px"
