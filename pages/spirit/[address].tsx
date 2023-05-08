@@ -62,7 +62,7 @@ export default function Spirit() {
     setActiveFilter([...cacheActiveFilter])
   }
 
-  const sleep = (ms) => {
+  const sleep = (ms: any) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
@@ -70,7 +70,7 @@ export default function Spirit() {
     try {
       setToast(true)
       setIsMinting(true)
-      await sleep(2000)
+      await sleep(5000)
       // const client = await getSigningCosmWasmClient()
       // const fee: StdFee = {
       //   amount: [
