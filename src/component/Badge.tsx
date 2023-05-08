@@ -27,7 +27,7 @@ const Badge: FC<any> = ({ image, header, description, date }) => {
         }}
       />
       <Box sx={{ padding: '12px 15px', zIndex: '1' }}>
-        <Typography fontWeight="700" fontSize="20px" color="#00CDDA">
+        <Typography fontWeight="700" fontSize="20px" color="white">
           {header}
         </Typography>
         <Typography
