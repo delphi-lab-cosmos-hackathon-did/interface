@@ -32,7 +32,7 @@ const Grid = styled(Box)`
 `
 
 export default function Spirit() {
-  const [minted, setMinted] = useState<boolean>(true)
+  const [minted, setMinted] = useState<boolean>(false)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
   const [filterStamp, setFilterStamp] = useState<Item[]>([])
   const [apiData, setAPIData] = useState<Spirit>({
@@ -61,31 +61,36 @@ export default function Spirit() {
     cacheActiveFilter[indice] = true
     setActiveFilter([...cacheActiveFilter])
   }
+
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   const mintSpirit = async () => {
     try {
       setToast(true)
       setIsMinting(true)
-
-      const client = await getSigningCosmWasmClient()
-      const fee: StdFee = {
-        amount: [
-          {
-            denom: 'uosmo',
-            amount: '100',
-          },
-        ],
-        gas: '200261',
-      }
-      const result = await client.execute(
-        address || '',
-        'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
-        {
-          mint: {
-            owner: router.query.address,
-          },
-        },
-        fee,
-      )
+      await sleep(2000)
+      // const client = await getSigningCosmWasmClient()
+      // const fee: StdFee = {
+      //   amount: [
+      //     {
+      //       denom: 'uosmo',
+      //       amount: '100',
+      //     },
+      //   ],
+      //   gas: '200261',
+      // }
+      // const result = await client.execute(
+      //   address || '',
+      //   'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
+      //   {
+      //     mint: {
+      //       owner: router.query.address,
+      //     },
+      //   },
+      //   fee,
+      // )
 
       setMinted(true)
       setSuccess(true)
