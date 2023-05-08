@@ -103,7 +103,7 @@ export default function Spirit() {
   }
   const checkSpiritStatus = async () => {
     const client = await getCosmWasmClient()
-
+    //
     try {
       const msg = await client.queryContractSmart(
         'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
