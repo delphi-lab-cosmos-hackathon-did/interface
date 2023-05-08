@@ -1,4 +1,12 @@
-import { OutlinedInput, TextField } from '@mui/material'
+import {
+  Alert,
+  CircularProgress,
+  OutlinedInput,
+  Skeleton,
+  Snackbar,
+  SnackbarContent,
+  TextField,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
@@ -22,7 +30,10 @@ export default function Spirit() {
   const [filterStamp, setFilterStamp] = useState<Item[]>([])
   const [apiData, setAPIData] = useState<Spirit>(API_DATA)
   const [badge, setBadge] = useState<Set<string>>(new Set())
-
+  const [ready, setReady] = useState(false)
+  const [toast, setToast] = useState(false)
+  const [isMinting, setIsMinting] = useState(false)
+  const [success, setSuccess] = useState(false)
   const router = useRouter()
 
   const { getCosmWasmClient, getSigningCosmWasmClient, address } =
@@ -33,28 +44,39 @@ export default function Spirit() {
     setActiveFilter([...cacheActiveFilter])
   }
   const mintSpirit = async () => {
-    const client = await getSigningCosmWasmClient()
-    const fee: StdFee = {
-      amount: [
-        {
-          denom: 'uosmo',
-          amount: '100',
-        },
-      ],
-      gas: '200261',
-    }
-    const result = await client.execute(
-      address || '',
-      'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
-      {
-        mint: {
-          owner: router.query.address,
-        },
-      },
-      fee,
-    )
+    try {
+      setToast(true)
+      setIsMinting(true)
 
-    setMinted(true)
+      const client = await getSigningCosmWasmClient()
+      const fee: StdFee = {
+        amount: [
+          {
+            denom: 'uosmo',
+            amount: '100',
+          },
+        ],
+        gas: '200261',
+      }
+      const result = await client.execute(
+        address || '',
+        'osmo1ky4y575azpje9c8en35h5a8mjutsyjnkpr6nepjvg4ep8nplm4xqphm92d',
+        {
+          mint: {
+            owner: router.query.address,
+          },
+        },
+        fee,
+      )
+
+      setMinted(true)
+      setSuccess(true)
+    } catch {
+      setIsMinting(false)
+    } finally {
+      // setToast(false)
+      setIsMinting(false)
+    }
   }
   const checkSpiritStatus = async () => {
     const client = await getCosmWasmClient()
@@ -84,8 +106,10 @@ export default function Spirit() {
             address: (router.query?.address || '').toString(),
           })
           setAPIData(spirit)
+          setReady(true)
         } catch (err) {
           console.log('err', err)
+          setReady(true)
         }
       }
       fetch()
@@ -124,6 +148,10 @@ export default function Spirit() {
     setFilterStamp([...cacheFilterStamp])
   }, [activeFilter])
 
+  const handleClose = () => {
+    setToast(false)
+  }
+
   const formatDateDuration = (startDate: string, endDate: string) => {
     const duration = dayjs(startDate).diff(dayjs(endDate), 'month')
     if (duration < 12) {
@@ -149,7 +177,7 @@ export default function Spirit() {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-around',
             alignItems: 'center',
             width: '100%',
           }}
@@ -157,98 +185,138 @@ export default function Spirit() {
           <Box marginTop="31px">
             <img width={571} height={516} src="/ghost.png" alt="spirit" />
           </Box>
-          {minted ? (
-            <Box>
-              <Typography
-                variant="h2"
-                fontWeight="600"
-                fontSize="30px"
-                lineHeight="45px"
-                color="#FFA0BD"
-              >
-                Address:
-              </Typography>
-              <Typography
-                variant="h2"
-                fontWeight="400"
-                fontSize="27px"
-                lineHeight="40px"
-                color="white"
-              >
-                {router.query.address}
-              </Typography>
+          {ready ? (
+            minted ? (
+              <Box>
+                <Typography
+                  variant="h2"
+                  fontWeight="600"
+                  fontSize="30px"
+                  lineHeight="45px"
+                  color="#FFA0BD"
+                >
+                  Address:
+                </Typography>
+                <Typography
+                  variant="h2"
+                  fontWeight="400"
+                  fontSize="27px"
+                  lineHeight="40px"
+                  color="white"
+                >
+                  {router.query.address}
+                </Typography>
+                <Box
+                  sx={{
+                    width: '630px',
+                    background: 'rgba(217, 217, 217, 0.3)',
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                    borderRadius: '15px',
+                    padding: '32px 38px',
+                    textAlign: 'center',
+                    marginTop: '16px',
+                  }}
+                >
+                  <Box sx={{ textAlign: 'start' }}>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#8DDDFF"
+                    >
+                      {' '}
+                      Wallet Age:{' '}
+                      <span style={{ color: 'white' }}>
+                        {formatDateDuration(
+                          apiData.statistics.last_active_timestamp,
+                          apiData.statistics.first_active_timestamp,
+                        )}
+                      </span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#FFE39A"
+                    >
+                      {' '}
+                      Activity Frequency:{' '}
+                      <span style={{ color: 'white' }}>2 Months</span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#9CFF94"
+                    >
+                      {' '}
+                      Governance Voting:{' '}
+                      <span style={{ color: 'white' }}>2 Months</span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#E786FF"
+                    >
+                      {' '}
+                      KYC: <span style={{ color: 'white' }}>2 Months</span>
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box display="flex" width="800px" flexWrap="wrap">
+                  {Array.from(badge).map((tag, index) => {
+                    return (
+                      <Box key={index} marginRight="22px" marginTop="32px">
+                        <BaseButton>{tag}</BaseButton>
+                      </Box>
+                    )
+                  })}
+                </Box>
+              </Box>
+            ) : (
               <Box
                 sx={{
-                  width: '630px',
+                  width: '574px',
+                  height: '272px',
                   background: 'rgba(217, 217, 217, 0.3)',
                   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
                   borderRadius: '15px',
-                  padding: '32px 38px',
+                  padding: '38px 60px',
                   textAlign: 'center',
-                  marginTop: '16px',
                 }}
               >
-                <Box sx={{ textAlign: 'start' }}>
-                  <Typography
-                    sx={{ marginTop: '8px' }}
-                    fontSize="20px"
-                    lineHeight="30px"
-                    fontWeight="500"
-                    color="#8DDDFF"
-                  >
-                    {' '}
-                    Wallet Age:{' '}
-                    <span style={{ color: 'white' }}>
-                      {formatDateDuration(
-                        apiData.statistics.last_active_timestamp,
-                        apiData.statistics.first_active_timestamp,
-                      )}
-                    </span>
-                  </Typography>
-                  <Typography
-                    sx={{ marginTop: '8px' }}
-                    fontSize="20px"
-                    lineHeight="30px"
-                    fontWeight="500"
-                    color="#FFE39A"
-                  >
-                    {' '}
-                    Activity Frequency:{' '}
-                    <span style={{ color: 'white' }}>2 Months</span>
-                  </Typography>
-                  <Typography
-                    sx={{ marginTop: '8px' }}
-                    fontSize="20px"
-                    lineHeight="30px"
-                    fontWeight="500"
-                    color="#9CFF94"
-                  >
-                    {' '}
-                    Governance Voting:{' '}
-                    <span style={{ color: 'white' }}>2 Months</span>
-                  </Typography>
-                  <Typography
-                    sx={{ marginTop: '8px' }}
-                    fontSize="20px"
-                    lineHeight="30px"
-                    fontWeight="500"
-                    color="#E786FF"
-                  >
-                    {' '}
-                    KYC: <span style={{ color: 'white' }}>2 Months</span>
-                  </Typography>
-                </Box>
+                <Typography
+                  variant="h2"
+                  fontWeight="600"
+                  fontSize="25px"
+                  lineHeight="37.5px"
+                  color="#EAFF68"
+                >
+                  Mint Your Spirit
+                </Typography>
+                <Typography
+                  sx={{ marginTop: '8px' }}
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                  color="white"
+                >
+                  You don’t have Spirit yet. Mint your Spirit to explore badges
+                </Typography>
+                <BaseButton
+                  onClick={() => mintSpirit()}
+                  sx={{ marginTop: '32px' }}
+                  fullWidth
+                >
+                  Mint Spirit
+                </BaseButton>
               </Box>
-              <Box display="flex" width="800px" flexWrap="wrap">
-                {Array.from(badge).map((tag, index) => {
-                  return (
-                    <Box key={index} marginRight="22px" marginTop="32px">
-                      <BaseButton>{tag}</BaseButton>
-                    </Box>
-                  )
-                })}
-              </Box>
-            </Box>
+            )
           ) : (
             <Box
               sx={{
@@ -261,31 +329,10 @@ export default function Spirit() {
                 textAlign: 'center',
               }}
             >
-              <Typography
-                variant="h2"
-                fontWeight="600"
-                fontSize="25px"
-                lineHeight="37.5px"
-                color="#EAFF68"
-              >
-                Mint Your Spirit
-              </Typography>
-              <Typography
-                sx={{ marginTop: '8px' }}
-                fontSize="20px"
-                lineHeight="30px"
-                fontWeight="500"
-                color="white"
-              >
-                You don’t have Spirit yet. Mint your Spirit to explore badges
-              </Typography>
-              <BaseButton
-                onClick={() => mintSpirit()}
-                sx={{ marginTop: '32px' }}
-                fullWidth
-              >
-                Mint Spirit
-              </BaseButton>
+              <Skeleton width={300} height={40} />
+              <Skeleton width={200} height={40} />
+              <Skeleton width={250} height={40} />
+              <Skeleton width={220} height={40} />
             </Box>
           )}
         </Box>
@@ -342,6 +389,32 @@ export default function Spirit() {
           </Box>
         )}
       </Box>
+
+      <Snackbar open={toast} autoHideDuration={6000} onClose={handleClose}>
+        {isMinting ? (
+          <SnackbarContent
+            sx={{ background: 'rgb(2, 136, 209)' }}
+            message={
+              <Box display="flex" height="20px">
+                <CircularProgress size="22px" sx={{ mr: 2, color: 'white' }} />
+                Loading
+              </Box>
+            }
+          ></SnackbarContent>
+        ) : success ? (
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{ width: '100%' }}
+          >
+            Minted!
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            Fail!
+          </Alert>
+        )}
+      </Snackbar>
     </Container>
   )
 }
