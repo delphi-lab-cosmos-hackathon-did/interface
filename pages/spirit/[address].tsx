@@ -6,6 +6,7 @@ import {
   Snackbar,
   SnackbarContent,
   TextField,
+  styled,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -24,11 +25,28 @@ import { spiritService } from '../../src/service/spiritService'
 import { useChainWallet } from '@cosmos-kit/react'
 import { StdFee } from '@cosmjs/stargate'
 
+const Grid = styled(Box)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
+  gap: 1rem;
+`
+
 export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
   const [filterStamp, setFilterStamp] = useState<Item[]>([])
-  const [apiData, setAPIData] = useState<Spirit>(API_DATA)
+  const [apiData, setAPIData] = useState<Spirit>({
+    attributes: [],
+    statistics: {
+      first_active_height: 0,
+      first_active_timestamp: '',
+      last_active_height: 0,
+      last_active_timestamp: '',
+      success_count: 0,
+      gov_total: 0,
+      gov_voted: 0,
+    },
+  })
   const [badge, setBadge] = useState<Set<string>>(new Set())
   const [ready, setReady] = useState(false)
   const [toast, setToast] = useState(false)
@@ -107,6 +125,7 @@ export default function Spirit() {
           })
           setAPIData(spirit)
           setReady(true)
+          setActiveFilter([true, false, false])
         } catch (err) {
           console.log('err', err)
           setReady(true)
@@ -187,96 +206,62 @@ export default function Spirit() {
           </Box>
           {ready ? (
             minted ? (
-              <Box>
+              <Box sx={{ textAlign: 'start' }}>
                 <Typography
-                  variant="h2"
-                  fontWeight="600"
-                  fontSize="30px"
-                  lineHeight="45px"
-                  color="#FFA0BD"
+                  sx={{ marginTop: '8px' }}
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                  color="#8DDDFF"
                 >
-                  Address:
+                  {' '}
+                  Wallet Age:{' '}
+                  <span style={{ color: 'white' }}>
+                    {formatDateDuration(
+                      apiData.statistics.last_active_timestamp,
+                      apiData.statistics.first_active_timestamp,
+                    )}
+                  </span>
                 </Typography>
                 <Typography
-                  variant="h2"
-                  fontWeight="400"
-                  fontSize="27px"
-                  lineHeight="40px"
-                  color="white"
+                  sx={{ marginTop: '8px' }}
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                  color="#FFE39A"
                 >
-                  {router.query.address}
+                  {' '}
+                  Last Active:{' '}
+                  <span style={{ color: 'white' }}>
+                    {dayjs(apiData.statistics.last_active_timestamp).format(
+                      'DD/MM/YYYY',
+                    )}
+                  </span>
                 </Typography>
-                <Box
-                  sx={{
-                    width: '630px',
-                    background: 'rgba(217, 217, 217, 0.3)',
-                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                    borderRadius: '15px',
-                    padding: '32px 38px',
-                    textAlign: 'center',
-                    marginTop: '16px',
-                  }}
+                <Typography
+                  sx={{ marginTop: '8px' }}
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                  color="#9CFF94"
                 >
-                  <Box sx={{ textAlign: 'start' }}>
-                    <Typography
-                      sx={{ marginTop: '8px' }}
-                      fontSize="20px"
-                      lineHeight="30px"
-                      fontWeight="500"
-                      color="#8DDDFF"
-                    >
-                      {' '}
-                      Wallet Age:{' '}
-                      <span style={{ color: 'white' }}>
-                        {formatDateDuration(
-                          apiData.statistics.last_active_timestamp,
-                          apiData.statistics.first_active_timestamp,
-                        )}
-                      </span>
-                    </Typography>
-                    <Typography
-                      sx={{ marginTop: '8px' }}
-                      fontSize="20px"
-                      lineHeight="30px"
-                      fontWeight="500"
-                      color="#FFE39A"
-                    >
-                      {' '}
-                      Activity Frequency:{' '}
-                      <span style={{ color: 'white' }}>2 Months</span>
-                    </Typography>
-                    <Typography
-                      sx={{ marginTop: '8px' }}
-                      fontSize="20px"
-                      lineHeight="30px"
-                      fontWeight="500"
-                      color="#9CFF94"
-                    >
-                      {' '}
-                      Governance Voting:{' '}
-                      <span style={{ color: 'white' }}>2 Months</span>
-                    </Typography>
-                    <Typography
-                      sx={{ marginTop: '8px' }}
-                      fontSize="20px"
-                      lineHeight="30px"
-                      fontWeight="500"
-                      color="#E786FF"
-                    >
-                      {' '}
-                      KYC: <span style={{ color: 'white' }}>2 Months</span>
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box display="flex" width="800px" flexWrap="wrap">
-                  {Array.from(badge).map((tag, index) => {
-                    return (
-                      <Box key={index} marginRight="22px" marginTop="32px">
-                        <BaseButton>{tag}</BaseButton>
-                      </Box>
-                    )
-                  })}
-                </Box>
+                  {' '}
+                  Governance Voting:{' '}
+                  <span style={{ color: 'white' }}>
+                    {apiData.statistics.gov_voted} /{' '}
+                    {apiData.statistics.gov_total}
+                  </span>
+                </Typography>
+                <Typography
+                  sx={{ marginTop: '8px' }}
+                  fontSize="20px"
+                  lineHeight="30px"
+                  fontWeight="500"
+                  color="#E786FF"
+                >
+                  {' '}
+                  KYC: <span style={{ color: 'white' }}>2 Months</span>
+                </Typography>
               </Box>
             ) : (
               <Box
@@ -373,10 +358,10 @@ export default function Spirit() {
                 </BaseToggle>
               </Box>
             </Box>
-            <Box marginTop="24px" display="flex" flexWrap="wrap">
+            <Grid marginTop="24px">
               {filterStamp.map((stamp, index) => {
                 return (
-                  <Box key={index} marginTop="16px" marginRight="100px">
+                  <Box key={index}>
                     <Badge
                       image={stamp.image}
                       header={stamp.attribute}
@@ -385,7 +370,7 @@ export default function Spirit() {
                   </Box>
                 )
               })}
-            </Box>
+            </Grid>
           </Box>
         )}
       </Box>
