@@ -17,12 +17,10 @@ const Badge: FC<any> = ({ image, header, description, date }) => {
       }}
     >
       <img
-        width="100%"
-        height="96"
         src={image}
-        style={{ objectFit: 'cover' }}
+        style={{ objectFit: 'cover', zIndex: '-1', position: 'absolute' }}
       />
-      <Box sx={{ padding: '12px 15px' }}>
+      <Box sx={{ padding: '12px 15px', zIndex: '1' }}>
         <Typography fontWeight="700" fontSize="20px" color="#00CDDA">
           {header}
         </Typography>

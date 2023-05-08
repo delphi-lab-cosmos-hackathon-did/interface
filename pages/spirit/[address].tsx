@@ -20,7 +20,18 @@ export default function Spirit() {
   const [minted, setMinted] = useState<boolean>(true)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
   const [filterStamp, setFilterStamp] = useState<Item[]>([])
-  const [apiData, setAPIData] = useState<Spirit>(API_DATA)
+  const [apiData, setAPIData] = useState<Spirit>({
+    attributes: [],
+    statistics: {
+      first_active_height: 0,
+      first_active_timestamp: '',
+      last_active_height: 0,
+      last_active_timestamp: '',
+      success_count: 0,
+      gov_total: 0,
+      gov_voted: 0,
+    },
+  })
   const [badge, setBadge] = useState<Set<string>>(new Set())
 
   const router = useRouter()
@@ -84,6 +95,7 @@ export default function Spirit() {
             address: (router.query?.address || '').toString(),
           })
           setAPIData(spirit)
+          setActiveFilter([true, false, false])
         } catch (err) {
           console.log('err', err)
         }
@@ -213,8 +225,12 @@ export default function Spirit() {
                     color="#FFE39A"
                   >
                     {' '}
-                    Activity Frequency:{' '}
-                    <span style={{ color: 'white' }}>2 Months</span>
+                    Last Active:{' '}
+                    <span style={{ color: 'white' }}>
+                      {dayjs(apiData.statistics.last_active_timestamp).format(
+                        'DD/MM/YYYY',
+                      )}
+                    </span>
                   </Typography>
                   <Typography
                     sx={{ marginTop: '8px' }}
@@ -225,7 +241,10 @@ export default function Spirit() {
                   >
                     {' '}
                     Governance Voting:{' '}
-                    <span style={{ color: 'white' }}>2 Months</span>
+                    <span style={{ color: 'white' }}>
+                      {apiData.statistics.gov_voted} /{' '}
+                      {apiData.statistics.gov_total}
+                    </span>
                   </Typography>
                   <Typography
                     sx={{ marginTop: '8px' }}

@@ -21,4 +21,6 @@ export interface Statistics {
   last_active_height: number
   last_active_timestamp: string
   success_count: number
+  gov_total: number
+  gov_voted: number
 }
