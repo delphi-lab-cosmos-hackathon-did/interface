@@ -70,7 +70,7 @@ export default function Spirit() {
     try {
       setToast(true)
       setIsMinting(true)
-      await sleep(5000)
+      await sleep(6000)
       // const client = await getSigningCosmWasmClient()
       // const fee: StdFee = {
       //   amount: [
