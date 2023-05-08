@@ -35,6 +35,14 @@ export default function MyApp(props: MyAppProps) {
           assetLists={assets} // supported asset lists
           wallets={wallets} // supported wallets
           wrappedWithChakra={true}
+          endpointOptions={{
+            endpoints: {
+              osmosistestnet: {
+                rpc: ['https://rpc-test.osmosis.zone/'],
+                rest: ['https://lcd-test.osmosis.zone/'],
+              },
+            },
+          }}
         >
           <ThemeProvider theme={theme}>
             <CssBaseline />
