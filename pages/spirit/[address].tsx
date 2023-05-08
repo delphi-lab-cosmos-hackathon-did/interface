@@ -209,132 +209,170 @@ export default function Spirit() {
           <Box marginTop="31px">
             <img width={571} height={516} src="/ghost.png" alt="spirit" />
           </Box>
-          {ready ? (
-            minted ? (
-              <Box
-                sx={{
-                  width: '574px',
-                  height: '272px',
-                  background: 'rgba(217, 217, 217, 0.3)',
-                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  borderRadius: '15px',
-                  padding: '38px 60px',
-                  textAlign: 'start',
-                }}
-              >
-                <Typography
-                  sx={{ marginTop: '8px' }}
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                  color="#8DDDFF"
+          <Box>
+            {ready ? (
+              minted ? (
+                <>
+                  <Box display="flex" gap={1}>
+                    <Typography
+                      variant="h2"
+                      fontWeight="600"
+                      fontSize="20px"
+                      lineHeight="45px"
+                      color="#FFA0BD"
+                    >
+                      Address:
+                    </Typography>
+                    <Typography
+                      variant="h2"
+                      fontWeight="400"
+                      fontSize="20px"
+                      lineHeight="40px"
+                      color="white"
+                    >
+                      {router.query.address}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      mt: 2,
+                      width: '574px',
+                      height: '272px',
+                      background: 'rgba(217, 217, 217, 0.3)',
+                      boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                      borderRadius: '15px',
+                      padding: '38px 60px',
+                      textAlign: 'start',
+                    }}
+                  >
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#8DDDFF"
+                    >
+                      {' '}
+                      Wallet Age:{' '}
+                      <span style={{ color: 'white' }}>
+                        {formatDateDuration(
+                          apiData.statistics.last_active_timestamp,
+                          apiData.statistics.first_active_timestamp,
+                        )}
+                      </span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#FFE39A"
+                    >
+                      {' '}
+                      Last Active:{' '}
+                      <span style={{ color: 'white' }}>
+                        {dayjs(apiData.statistics.last_active_timestamp).format(
+                          'DD/MM/YYYY',
+                        )}
+                      </span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#9CFF94"
+                    >
+                      {' '}
+                      Governance Voting:{' '}
+                      <span style={{ color: 'white' }}>
+                        {apiData.statistics.gov_voted} /{' '}
+                        {apiData.statistics.gov_total}
+                      </span>
+                    </Typography>
+                    <Typography
+                      sx={{ marginTop: '8px' }}
+                      fontSize="20px"
+                      lineHeight="30px"
+                      fontWeight="500"
+                      color="#E786FF"
+                    >
+                      {' '}
+                      KYC: <span style={{ color: 'white' }}>2 Months</span>
+                    </Typography>
+                  </Box>
+                  <Box display="flex" width="800px" flexWrap="wrap">
+                    {Array.from(badge).map((tag, index) => {
+                      return (
+                        <Box key={index} marginRight="22px" marginTop="32px">
+                          <BaseButton>{tag}</BaseButton>
+                        </Box>
+                      )
+                    })}
+                  </Box>
+                </>
+              ) : (
+                <Box
+                  sx={{
+                    width: '574px',
+                    height: '272px',
+                    background: 'rgba(217, 217, 217, 0.3)',
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                    borderRadius: '15px',
+                    padding: '38px 60px',
+                    textAlign: 'center',
+                  }}
                 >
-                  {' '}
-                  Wallet Age:{' '}
-                  <span style={{ color: 'white' }}>
-                    {formatDateDuration(
-                      apiData.statistics.last_active_timestamp,
-                      apiData.statistics.first_active_timestamp,
-                    )}
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{ marginTop: '8px' }}
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                  color="#FFE39A"
-                >
-                  {' '}
-                  Last Active:{' '}
-                  <span style={{ color: 'white' }}>
-                    {dayjs(apiData.statistics.last_active_timestamp).format(
-                      'DD/MM/YYYY',
-                    )}
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{ marginTop: '8px' }}
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                  color="#9CFF94"
-                >
-                  {' '}
-                  Governance Voting:{' '}
-                  <span style={{ color: 'white' }}>
-                    {apiData.statistics.gov_voted} /{' '}
-                    {apiData.statistics.gov_total}
-                  </span>
-                </Typography>
-                <Typography
-                  sx={{ marginTop: '8px' }}
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                  color="#E786FF"
-                >
-                  {' '}
-                  KYC: <span style={{ color: 'white' }}>2 Months</span>
-                </Typography>
-              </Box>
+                  <Typography
+                    variant="h2"
+                    fontWeight="600"
+                    fontSize="25px"
+                    lineHeight="37.5px"
+                    color="#EAFF68"
+                  >
+                    Mint Your Spirit
+                  </Typography>
+                  <Typography
+                    sx={{ marginTop: '8px' }}
+                    fontSize="20px"
+                    lineHeight="30px"
+                    fontWeight="500"
+                    color="white"
+                  >
+                    You don’t have Spirit yet. Mint your Spirit to explore
+                    badges
+                  </Typography>
+                  <BaseButton
+                    onClick={() => mintSpirit()}
+                    sx={{ marginTop: '32px' }}
+                    fullWidth
+                  >
+                    Mint Spirit
+                  </BaseButton>
+                </Box>
+              )
             ) : (
-              <Box
-                sx={{
-                  width: '574px',
-                  height: '272px',
-                  background: 'rgba(217, 217, 217, 0.3)',
-                  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                  borderRadius: '15px',
-                  padding: '38px 60px',
-                  textAlign: 'center',
-                }}
-              >
-                <Typography
-                  variant="h2"
-                  fontWeight="600"
-                  fontSize="25px"
-                  lineHeight="37.5px"
-                  color="#EAFF68"
+              <Box>
+                <Box
+                  sx={{
+                    width: '574px',
+                    height: '272px',
+                    background: 'rgba(217, 217, 217, 0.3)',
+                    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                    borderRadius: '15px',
+                    padding: '38px 60px',
+                    textAlign: 'center',
+                  }}
                 >
-                  Mint Your Spirit
-                </Typography>
-                <Typography
-                  sx={{ marginTop: '8px' }}
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                  color="white"
-                >
-                  You don’t have Spirit yet. Mint your Spirit to explore badges
-                </Typography>
-                <BaseButton
-                  onClick={() => mintSpirit()}
-                  sx={{ marginTop: '32px' }}
-                  fullWidth
-                >
-                  Mint Spirit
-                </BaseButton>
+                  <Skeleton width={300} height={40} />
+                  <Skeleton width={200} height={40} />
+                  <Skeleton width={250} height={40} />
+                  <Skeleton width={220} height={40} />
+                </Box>
               </Box>
-            )
-          ) : (
-            <Box
-              sx={{
-                width: '574px',
-                height: '272px',
-                background: 'rgba(217, 217, 217, 0.3)',
-                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-                borderRadius: '15px',
-                padding: '38px 60px',
-                textAlign: 'center',
-              }}
-            >
-              <Skeleton width={300} height={40} />
-              <Skeleton width={200} height={40} />
-              <Skeleton width={250} height={40} />
-              <Skeleton width={220} height={40} />
-            </Box>
-          )}
+            )}
+          </Box>
         </Box>
         {minted && (
           <Box marginTop="46px">
