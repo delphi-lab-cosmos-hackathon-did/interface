@@ -14,6 +14,10 @@ class SpiritService {
     )
     return response?.data
   }
+  getBadgeList = async (tag: string) => {
+    const response = await this.axios.get(`/tags/osmosis/osmosis-1/${tag}`)
+    return response?.data
+  }
 }
 
 export const spiritService = new SpiritService()

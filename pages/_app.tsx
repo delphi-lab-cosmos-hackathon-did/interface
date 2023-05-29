@@ -46,7 +46,12 @@ export default function MyApp(props: MyAppProps) {
         >
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Box minHeight="100vh" display="flex" flexDirection="column">
+            <Box
+              sx={{ background: 'url(/bg.svg)' }}
+              minHeight="100vh"
+              display="flex"
+              flexDirection="column"
+            >
               <ButtonAppBar />
 
               <Box flexGrow={1}>

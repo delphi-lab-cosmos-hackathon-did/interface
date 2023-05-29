@@ -63,7 +63,29 @@ export const ButtonAppBar = () => {
               // }}
               href="/spirit"
             >
-              Spirit
+              My Spirit
+            </Button>
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <Button
+              sx={{ color: 'white', display: 'block', height: '100%' }}
+              // onClick={() => {
+              //   router.push('/spirit')
+              // }}
+              href="/explore"
+            >
+              Explore Badge
+            </Button>
+          </Box>
+          <Box sx={{ ml: 2 }}>
+            <Button
+              sx={{ color: 'white', display: 'block', height: '100%' }}
+              // onClick={() => {
+              //   router.push('/spirit')
+              // }}
+              href="/create-badge"
+            >
+              Create New Badge
             </Button>
           </Box>
           <Box flex="1"></Box>

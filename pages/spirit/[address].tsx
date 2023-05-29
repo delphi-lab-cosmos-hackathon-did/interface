@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import { spiritService } from '../../src/service/spiritService'
 import { useChainWallet } from '@cosmos-kit/react'
 import { StdFee } from '@cosmjs/stargate'
+import PointButton from '../../src/component/PointButton'
 
 const Grid = styled(Box)`
   display: grid;
@@ -32,7 +33,7 @@ const Grid = styled(Box)`
 `
 
 export default function Spirit() {
-  const [minted, setMinted] = useState<boolean>(false)
+  const [minted, setMinted] = useState<boolean>(true)
   const [activeFilter, setActiveFilter] = useState([true, false, false])
   const [filterStamp, setFilterStamp] = useState<Item[]>([])
   const [apiData, setAPIData] = useState<Spirit>({
@@ -124,7 +125,7 @@ export default function Spirit() {
     if (router.isReady) {
       const fetch = async () => {
         try {
-          await checkSpiritStatus()
+          // await checkSpiritStatus()
           const spirit = await spiritService.getSpirit({
             address: (router.query?.address || '').toString(),
           })
@@ -184,6 +185,24 @@ export default function Spirit() {
     const year = Math.floor(duration / 12)
     const month = duration % 12
     return `${year} Year ${month} Months`
+  }
+  const formatProtocol = () => {
+    if (activeFilter[0]) {
+      return ''
+    } else if (activeFilter[1]) {
+      return 'Osmosis'
+    } else if (activeFilter[2]) {
+      return 'Mars'
+    }
+  }
+  const formatImage = () => {
+    if (activeFilter[0]) {
+      return ''
+    } else if (activeFilter[1]) {
+      return '/osmosis.png'
+    } else if (activeFilter[2]) {
+      return '/mars.png'
+    }
   }
   return (
     <Container maxWidth="xl">
@@ -411,6 +430,18 @@ export default function Spirit() {
                 </BaseToggle>
               </Box>
             </Box>
+            <Box display="flex" marginTop="24px">
+              <PointButton image="/logo.png">
+                Spirito Point: 10,000 Points
+              </PointButton>
+              {!activeFilter[0] && (
+                <Box marginLeft="16px">
+                  <PointButton image={formatImage()}>
+                    {formatProtocol()} Point: 10,000 Points
+                  </PointButton>
+                </Box>
+              )}
+            </Box>
             <Grid marginTop="24px">
               {filterStamp.map((stamp, index) => {
                 return (
@@ -427,32 +458,6 @@ export default function Spirit() {
           </Box>
         )}
       </Box>
-
-      <Snackbar open={toast} autoHideDuration={6000} onClose={handleClose}>
-        {isMinting ? (
-          <SnackbarContent
-            sx={{ background: 'rgb(2, 136, 209)' }}
-            message={
-              <Box display="flex" height="20px">
-                <CircularProgress size="22px" sx={{ mr: 2, color: 'white' }} />
-                Loading
-              </Box>
-            }
-          ></SnackbarContent>
-        ) : success ? (
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            sx={{ width: '100%' }}
-          >
-            Minted!
-          </Alert>
-        ) : (
-          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-            Fail!
-          </Alert>
-        )}
-      </Snackbar>
     </Container>
   )
 }
