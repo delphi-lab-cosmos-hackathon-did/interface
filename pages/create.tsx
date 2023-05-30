@@ -20,8 +20,8 @@ import { useRouter } from 'next/router'
 import { useChainWallet } from '@cosmos-kit/react'
 import { StdFee } from '@cosmjs/stargate'
 import TextInput from '../src/component/TextInput'
-import 'react-dropzone-uploader/dist/styles.css'
-import Dropzone from 'react-dropzone-uploader'
+// import 'react-dropzone-uploader/dist/styles.css'
+// import Dropzone from 'react-dropzone-uploader'
 
 const Grid = styled(Box)`
   display: grid;
@@ -97,13 +97,17 @@ export default function Spirit() {
               <Box display="flex">
                 <Box width="25%">
                   <Box sx={{ color: 'white!important' }} padding="24px">
-                    <Dropzone
+                    <img
+                      style={{ width: '200px', height: '200px' }}
+                      src="/dropzone.png"
+                    />
+                    {/* <Dropzone
                       getUploadParams={getUploadParams}
                       onChangeStatus={() => console.log()}
                       onSubmit={() => console.log()}
                       accept="image/*"
                       inputContent="Please add 400*400 Size"
-                    />
+                    /> */}
                   </Box>
                 </Box>
                 <Box width="75%">
