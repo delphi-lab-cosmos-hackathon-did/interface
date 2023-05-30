@@ -125,7 +125,7 @@ export default function Spirit() {
     if (router.isReady) {
       const fetch = async () => {
         try {
-          // await checkSpiritStatus()
+          await checkSpiritStatus()
           const spirit = await spiritService.getSpirit({
             address: (router.query?.address || '').toString(),
           })

@@ -11,3 +11,10 @@ body {
     rgb(28, 181, 224)
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
+.dzu-inputLabel {
+  color: black !important;
+}
+.dzu-dropzone {
+  background-color: lightgray;
+}

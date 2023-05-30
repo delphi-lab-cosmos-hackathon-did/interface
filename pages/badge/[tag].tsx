@@ -64,17 +64,18 @@ export default function Spirit() {
       const fetch = async () => {
         try {
           console.log('btoa')
-          let humanizedText = atob(router.query?.tag || '')
+          let humanizedText = atob((router.query?.tag || '').toString())
           let badge
           badgeList.forEach((_badge) => {
             if (_badge.attribute === humanizedText) {
-              badge = _badge
+              // badge = _badge
+              setBadgeInfo(_badge)
             }
           })
-          setBadgeInfo(badge)
+          // setBadgeInfo(badge)
           console.log('api call')
           const _list = await spiritService.getBadgeList(
-            router.query?.tag.toString() || '',
+            (router.query?.tag || '').toString(),
           )
           console.log('api called complete')
           const cacheList = [..._list]

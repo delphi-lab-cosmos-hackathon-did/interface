@@ -4,7 +4,15 @@ import PointButton from './PointButton'
 import { BaseButton } from './BaseButton'
 
 const Table: FC<any> = ({ list }) => {
-  const downloadFile = ({ data, fileName, fileType }) => {
+  const downloadFile = ({
+    data,
+    fileName,
+    fileType,
+  }: {
+    data: any
+    fileName: string
+    fileType: string
+  }) => {
     // Create a blob with the data we want to download as a file
     const blob = new Blob([data], { type: fileType })
     // Create an anchor element and dispatch a click event on it
@@ -21,7 +29,7 @@ const Table: FC<any> = ({ list }) => {
     a.remove()
   }
 
-  const exportToJson = (e) => {
+  const exportToJson = (e: any) => {
     e.preventDefault()
     downloadFile({
       data: JSON.stringify(list),
