@@ -83,7 +83,7 @@ export const ButtonAppBar = () => {
               // onClick={() => {
               //   router.push('/spirit')
               // }}
-              href="/create-badge"
+              href="/create"
             >
               Create New Badge
             </Button>
